@@ -1,29 +1,23 @@
 steps:
   # Step 1: Checkout the code from GitHub
   - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/zeshansaid/MagicCloudBuild']
+    args: ['clone', 'https://github.com/zeshansaid/ai-object-remover']
   
   # Step 2: Change directory to the repository
   - name: 'gcr.io/cloud-builders/docker'
   # your-repo-directory
-    dir: 'MagicCloudBuild'
+    dir: 'ai-object-remover'
     args: [
           'build',
           '-t',
-          'gcr.io/stone-composite-436518-s3/magic-ai',
-          # '-t',
-          # 'gcr.io/stone-composite-436518-s3/magic-ai:${SHORT_SHA}',
-          # '-t',
-          # 'gcr.io/stone-composite-436518-s3/magic-ai:latest',
-          # '--cache-from',
-          # 'gcr.io/stone-composite-436518-s3/magic-ai:latest',
+          'gcr.io/stone-composite-436518-s3/obj-rem-ai',
           '.'
           ]
   
   # Step 3: Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'magic-ai'
-    args: ['push', 'gcr.io/stone-composite-436518-s3/magic-ai']
+    dir: 'obj-rem-ai'
+    args: ['push', 'gcr.io/stone-composite-436518-s3/obj-rem-ai']
 
   
   
@@ -33,9 +27,9 @@ steps:
       - 'gcloud'
       - 'run'
       - 'deploy'
-      - 'magic-ai'
+      - 'obj-rem-ai'
       - '--image'
-      - 'gcr.io/stone-composite-436518-s3/magic-ai'
+      - 'gcr.io/stone-composite-436518-s3/obj-rem-ai'
       - '--platform'
       - 'managed'
       - '--region'

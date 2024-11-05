@@ -1,15 +1,15 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import torch
 import base64
-import torchvision as tv
 from PIL import Image, ImageFile
 from objectRemoval_engine import SimpleLama
 from PIL import Image
 import io
 import cv2
 import numpy as np
-from projectUtils import *
+
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
@@ -28,9 +28,13 @@ simple_lama = SimpleLama(device=device)
 def hello_world():
     return "api , online"
 
- 
-
 #------------------------------------ Object removal ---------------------------------------------
+
+def base64toopencv(base64_string):
+    im_bytes = base64.b64decode(base64_string)
+    im_arr = np.frombuffer(im_bytes, dtype=np.uint8)  # im_arr is one-dim Numpy array
+    img = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
+    return img
 
 """
 [{'startX': 1033.9316, 'startY': 1210.915, 'endX': 1033.9316, 'endY': 1267.9419, 'strokeWidth': 20}, {'startX': 1033.9316, 'startY': 1267.9419, 'endX': 1033.9316, 'endY': 1272.8931, 'strokeWidth': 20}, {'startX': 1033.9316, 'startY': 1272.8931, 'endX': 1033.9316, 'endY': 1288.873, 'strokeWidth': 20}, {'startX': 1033.9316, 'startY': 1288.873, 'endX': 1033.9316, 'endY': 1293.9355, 'strokeWidth': 20}]
